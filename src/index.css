@@ -1,0 +1,213 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --color-navy-900: #0b1f3a;
+  --color-navy-800: #102a4c;
+  --color-navy-700: #173761;
+  --color-gold-500: #f5a623;
+  --color-gold-600: #d98e0b;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: #1e293b;
+  background: #ffffff;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+#root {
+  width: 100%;
+}
+
+img, iframe {
+  max-width: 100%;
+}
+
+@media (min-width: 1536px) {
+  html { font-size: 112.5%; }
+}
+
+/* ===== Animations ===== */
+.rv { opacity: 0; }
+.rv.is-visible {
+  opacity: 1;
+  animation: rv-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) backwards;
+}
+.rv[data-rv="left"].is-visible  { animation-name: rv-left; }
+.rv[data-rv="right"].is-visible { animation-name: rv-right; }
+.rv[data-rv="zoom"].is-visible  { animation-name: rv-zoom; }
+.rv[data-rv="fade"].is-visible  { animation-name: rv-fade; }
+
+@keyframes rv-up    { from { opacity: 0; transform: translateY(36px); } }
+@keyframes rv-left  { from { opacity: 0; transform: translateX(-48px); } }
+@keyframes rv-right { from { opacity: 0; transform: translateX(48px); } }
+@keyframes rv-zoom  { from { opacity: 0; transform: scale(0.9); } }
+@keyframes rv-fade  { from { opacity: 0; } }
+
+.page-in { animation: page-in 0.5s ease both; }
+@keyframes page-in { from { opacity: 0; } }
+
+/* Hero glow + floating photo */
+.blur-2xl { animation: glow 5s ease-in-out infinite; }
+@keyframes glow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+.justify-center > .relative > .relative { animation: floaty 6s ease-in-out infinite; }
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Scroll progress bar + navbar */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 60;
+  background: linear-gradient(90deg, #f5a623, #ffd27a);
+  pointer-events: none;
+}
+header { transition: box-shadow 0.3s ease; }
+header.scrolled { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25); }
+
+header nav a.font-medium { position: relative; }
+header nav a.font-medium::after {
+  content: ""; position: absolute; left: 0; bottom: -6px;
+  height: 2px; width: 100%; background: #f5a623;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease;
+}
+header nav a.font-medium:hover::after,
+header nav a.font-medium.active::after { transform: scaleX(1); }
+
+/* WhatsApp button */
+a[aria-label="Chat on WhatsApp"] { animation: pop 0.6s cubic-bezier(0.22, 1, 0.36, 1) 1s backwards; }
+a[aria-label="Chat on WhatsApp"]::after {
+  content: ""; position: absolute; inset: 0; border-radius: 9999px;
+  border: 2px solid #22c55e; animation: ring 2.2s ease-out infinite;
+}
+@keyframes pop  { from { opacity: 0; transform: scale(0); } }
+@keyframes ring { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.7); opacity: 0; } }
+
+/* Hover effects */
+main section.bg-navy-900 .grid > div {
+  transition: translate 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+main section.bg-navy-900 .grid > div:hover {
+  translate: 0 -6px; border-color: rgba(245, 166, 35, 0.55); background-color: #173761;
+}
+main .grid > div .bg-gold-500\/15 { transition: scale 0.3s ease, background-color 0.3s ease; }
+main .grid > div:hover .bg-gold-500\/15 { scale: 1.12; background-color: rgba(245, 166, 35, 0.3); }
+main .grid-cols-2 > div { transition: translate 0.3s ease; }
+main .grid-cols-2 > div:hover { translate: 0 -4px; }
+a.rounded-full:hover, button.rounded-full:hover { translate: 0 -2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rv { opacity: 1; }
+  .rv.is-visible, .page-in, .blur-2xl,
+  .justify-center > .relative > .relative,
+  a[aria-label="Chat on WhatsApp"],
+  a[aria-label="Chat on WhatsApp"]::after { animation: none !important; }
+}
+
+/* ===== More animations ===== */
+
+/* Shimmer on hero gold text */
+main h1 span.text-gold-500 {
+  background: linear-gradient(90deg, #f5a623, #ffe29a, #f5a623);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+@keyframes shimmer { to { background-position: 200% center; } }
+
+/* Floating orbs behind gradient sections */
+main section[class*="bg-gradient-to"] { position: relative; overflow: hidden; isolation: isolate; }
+main section[class*="bg-gradient-to"]::before,
+main section[class*="bg-gradient-to"]::after {
+  content: ""; position: absolute; z-index: -1; border-radius: 9999px;
+  filter: blur(70px); pointer-events: none;
+}
+main section[class*="bg-gradient-to"]::before {
+  width: 320px; height: 320px; top: -80px; left: -60px;
+  background: rgba(245, 166, 35, 0.18);
+  animation: orb 14s ease-in-out infinite;
+}
+main section[class*="bg-gradient-to"]::after {
+  width: 380px; height: 380px; bottom: -120px; right: -80px;
+  background: rgba(60, 120, 220, 0.22);
+  animation: orb 18s ease-in-out infinite reverse;
+}
+@keyframes orb {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(40px, 30px); }
+}
+
+/* Hero CTA glow pulse */
+main section[class*="bg-gradient-to"] .mt-8 a.bg-gold-500 { animation: cta 2.4s ease-out infinite; }
+@keyframes cta {
+  0% { box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.55); }
+  70% { box-shadow: 0 0 0 16px rgba(245, 166, 35, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 166, 35, 0); }
+}
+
+/* Button shine sweep */
+a.rounded-full:not([aria-label]), button.rounded-full:not([aria-label]) {
+  position: relative; overflow: hidden;
+}
+a.rounded-full:not([aria-label])::before, button.rounded-full:not([aria-label])::before {
+  content: ""; position: absolute; top: 0; left: -75%; width: 50%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg); pointer-events: none;
+}
+a.rounded-full:not([aria-label]):hover::before, button.rounded-full:not([aria-label]):hover::before {
+  animation: shine 0.8s ease;
+}
+@keyframes shine { to { left: 130%; } }
+
+/* Heading underline bar */
+main h2::after {
+  content: ""; display: block; width: 0; height: 3px; border-radius: 2px;
+  background: #f5a623; margin: 12px auto 0;
+  transition: width 0.8s ease 0.4s;
+}
+main h2.is-visible::after { width: 64px; }
+
+/* Marquee strip */
+.marquee-track { animation: marquee 32s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* Course cards: icon + link hover */
+main .grid > div .rounded-xl.bg-navy-900 { transition: rotate 0.4s ease, scale 0.4s ease; }
+main .grid > div:hover .rounded-xl.bg-navy-900 { rotate: -6deg; scale: 1.08; }
+main .grid > div a.text-gold-600 { display: inline-block; transition: translate 0.25s ease; }
+main .grid > div a.text-gold-600:hover { translate: 6px 0; }
+
+/* FAQ answer slide */
+main .space-y-3 p { animation: faq 0.35s ease; }
+@keyframes faq { from { opacity: 0; transform: translateY(-6px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  main h1 span.text-gold-500,
+  main section[class*="bg-gradient-to"]::before,
+  main section[class*="bg-gradient-to"]::after,
+  main section[class*="bg-gradient-to"] .mt-8 a.bg-gold-500,
+  .marquee-track, main .space-y-3 p { animation: none !important; }
+}
