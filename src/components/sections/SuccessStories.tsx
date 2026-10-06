@@ -70,8 +70,8 @@ export default function SuccessStories({ limit }: Props) {
       <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 xl:px-16">
         <SectionTitle
           eyebrow="Results"
-          title={`${siteInfo.successStories} Success Stories`}
-          subtitle="Real scores from students who trained with us."
+          title={limit ? `${siteInfo.successStories} Success Stories` : "Student Results"}
+          subtitle={limit ? "Real scores from students who trained with us." : `A selection of real scores from the ${siteInfo.successStories} students who trained with us.`}
         />
 
         {!limit && (
