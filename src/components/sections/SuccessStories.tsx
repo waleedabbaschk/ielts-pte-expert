@@ -3,17 +3,16 @@ import { Quote, Star } from 'lucide-react'
 import SectionTitle from '../ui/SectionTitle'
 import Button from '../ui/Button'
 import { results } from '../../data/results'
-import type { Result } from '../../data/results'
+import type { Exam, Result } from '../../data/results'
 import { testimonials } from '../../data/testimonials'
 import { siteInfo } from '../../data/siteInfo'
 
 type Props = { limit?: number }
-type Filter = 'All' | 'PTE' | 'IELTS'
+type Filter = 'All' | Exam
 
-const fmt = (r: Result, v: number) => (r.exam === 'IELTS' ? v.toFixed(1) : String(v))
+const tabs: Filter[] = ['All', 'PTE', 'IELTS', 'Oxford ELLT', 'LanguageCert']
 
 function ResultCard({ r }: { r: Result }) {
-  const max = r.exam === 'IELTS' ? 9 : 90
   const initials = r.name
     .split(' ')
     .map((p) => p[0])
@@ -33,10 +32,8 @@ function ResultCard({ r }: { r: Result }) {
           </span>
         </div>
         <div className="text-right">
-          <div className="text-3xl font-extrabold leading-none text-navy-900">{fmt(r, r.overall)}</div>
-          <div className="mt-1 text-[10px] uppercase tracking-wider text-slate-400">
-            {r.exam === 'IELTS' ? 'Overall Band' : 'Overall'}
-          </div>
+          <div className="text-3xl font-extrabold leading-none text-navy-900">{r.overall}</div>
+          <div className="mt-1 text-[10px] uppercase tracking-wider text-slate-400">{r.overallLabel}</div>
         </div>
       </div>
 
@@ -45,12 +42,15 @@ function ResultCard({ r }: { r: Result }) {
           <div key={label}>
             <div className="mb-1 flex justify-between text-xs text-slate-500">
               <span>{label}</span>
-              <span className="font-semibold text-navy-900">{fmt(r, value)}</span>
+              <span className="font-semibold text-navy-900">
+                {value.toFixed(r.decimals)}
+                {r.exam === 'LanguageCert' ? '/50' : ''}
+              </span>
             </div>
             <div className="h-1.5 rounded-full bg-slate-100">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-gold-500 to-gold-600"
-                style={{ width: `${(value / max) * 100}%` }}
+                style={{ width: `${(value / r.max) * 100}%` }}
               />
             </div>
           </div>
@@ -64,7 +64,6 @@ export default function SuccessStories({ limit }: Props) {
   const [filter, setFilter] = useState<Filter>('All')
   const filtered = results.filter((r) => filter === 'All' || r.exam === filter)
   const shown = limit ? filtered.slice(0, limit) : filtered
-  const tabs: Filter[] = ['All', 'PTE', 'IELTS']
 
   return (
     <section className="bg-slate-50 py-14 md:py-20">
@@ -76,12 +75,12 @@ export default function SuccessStories({ limit }: Props) {
         />
 
         {!limit && (
-          <div className="mb-10 flex justify-center gap-3">
+          <div className="mb-10 flex flex-wrap justify-center gap-3">
             {tabs.map((t) => (
               <button
                 key={t}
                 onClick={() => setFilter(t)}
-                className={`cursor-pointer rounded-full px-6 py-2 text-sm font-semibold transition ${
+                className={`cursor-pointer rounded-full px-5 py-2 text-sm font-semibold transition ${
                   filter === t
                     ? 'bg-navy-900 text-white shadow-lg'
                     : 'bg-white text-navy-900 ring-1 ring-slate-200 hover:ring-gold-500'

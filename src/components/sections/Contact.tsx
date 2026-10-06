@@ -2,9 +2,13 @@
 import type { ChangeEvent, FormEvent } from 'react'
 import { MapPin, MessageCircle, Phone } from 'lucide-react'
 import SectionTitle from '../ui/SectionTitle'
+import Button from '../ui/Button'
 import { siteInfo } from '../../data/siteInfo'
 
 type FormState = { name: string; phone: string; course: string; message: string }
+
+const mapEmbed = 'https://maps.google.com/maps?q=Orkans%20International%20Chakwal&z=15&output=embed'
+const mapLink = 'https://www.google.com/maps/search/?api=1&query=Orkans+International+Chakwal'
 
 export default function Contact() {
   const [form, setForm] = useState<FormState>({ name: '', phone: '', course: 'IELTS', message: '' })
@@ -64,12 +68,22 @@ export default function Contact() {
               </p>
               <p className="text-sm text-slate-500">{siteInfo.mode}</p>
             </div>
-            <iframe
-              title="Location map"
-              src="https://www.google.com/maps?q=Orkans+International,+Chakwal,+Pakistan&output=embed"
-              className="h-64 w-full rounded-2xl border-0"
-              loading="lazy"
-            />
+
+            <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+              <iframe
+                title="Location map"
+                src={mapEmbed}
+                className="block h-64 w-full border-0 md:h-80"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              <div className="p-4">
+                <Button href={mapLink}>
+                  <MapPin className="h-4 w-4" /> Get Directions
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

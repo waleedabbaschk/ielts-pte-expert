@@ -6,6 +6,7 @@ import Courses from '../components/sections/Courses'
 import TeachingApproach from '../components/sections/TeachingApproach'
 import WhyChooseUs from '../components/sections/WhyChooseUs'
 import SuccessStories from '../components/sections/SuccessStories'
+import ReviewCTA from '../components/sections/ReviewCTA'
 import Gallery from '../components/sections/Gallery'
 import DemoLecture from '../components/sections/DemoLecture'
 import FAQ from '../components/sections/FAQ'
@@ -22,6 +23,7 @@ export default function Home() {
       <TeachingApproach />
       <WhyChooseUs />
       <SuccessStories limit={6} />
+      <ReviewCTA />
       <Gallery />
       <DemoLecture />
       <FAQ />
